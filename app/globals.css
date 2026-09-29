@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/* ============================================
+   Bouw MAN — Design tokens
+   Eén centrale plek voor kleuren, typografie
+   en radius. Aanpassen = overal doorgevoerd.
+   ============================================ */
+@theme {
+  /* Kleuren — Renovyte-stijl: monochroom, één donker accent.
+     Foto's dragen de kleur; de UI blijft neutraal.
+     Terug naar goud? Zet --color-accent op #c6a15b en
+     --color-accent-dark op #a9853f. */
+  --color-accent: #1a1a1a; /* donker accent — knoppen, cijferband, highlights */
+  --color-accent-dark: #383838; /* hover- en labelvariant */
+  --color-accent-soft: #f2f1ee; /* zachte neutrale achtergrond */
+  --color-ink: #1a1a1a; /* koppen en primaire tekst */
+  --color-ink-soft: #565c66; /* bodytekst, subteksten */
+  --color-mist: #f6f5f2; /* lichte sectie-achtergrond */
+  --color-line: #e6e3dd; /* randen en scheidingslijnen */
+  --color-whatsapp: #25d366;
+
+  /* Typografie */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Vormtaal */
+  --radius-card: 1rem;
+
+  /* Beweging */
+  --animate-hero-zoom: hero-zoom 9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-marquee: marquee 45s linear infinite;
+}
+
+/* Langzame uitzoom op de herofoto — subtiel, eenmalig. */
+@keyframes hero-zoom {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Doorlopende logostrip; elke lijst schuift zijn eigen breedte op. */
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Geen decoratieve CSS-animaties voor wie minder beweging wil.
+   (Framer Motion volgt dit al via MotionConfig reducedMotion="user".) */
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-zoom,
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Canvas onder het document = ink: doorscrollen voorbij de footer
+       toont donker. De witte zone bóven de pagina komt van een echt
+       element in de layout (geen gradient-trucs — die zijn op iOS
+       onbetrouwbaar). */
+    background-color: var(--color-ink);
+  }
+
+  body {
+    @apply relative bg-white font-sans text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply tracking-tight text-ink;
+    text-wrap: balance;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
